@@ -4,7 +4,7 @@ library(psyphy)
 library(ggplot2)
 setwd("C:/Users/Luise/Desktop/verghese_fit/")
 
-verghese_mod<-function(sig,n_dist,n_targ,sim){
+verghese_mod<-function(sig,n_targ,n_dist,sim){
   mu1<-0
   mu2<-sig # signal size (should be dprime of single target ident.)
   sd1<-1    # SD of target detector responses to distractor (Default: 1)
@@ -28,7 +28,7 @@ verghese_mod<-function(sig,n_dist,n_targ,sim){
 n_targ<-1
 n_dist<-7
 numit<-n_dist+n_targ
-sim<-100000
+sim<-10000
 sigs<-seq(0,6,by=0.1)
 pc<-vector(length=length(sigs))
 hit<-vector(length=length(sigs))
@@ -37,7 +37,7 @@ rej<-vector(length=length(sigs))
 miss<-vector(length=length(sigs))
 count<-1
 for (s in sigs){
-  verg<-verghese_mod(s,n_dist,n_targ,sim)
+  verg<-verghese_mod(s,n_targ,n_dist,sim)
   pc[count]<-verg$p
   hit[count]<-verg$hit
   fp[count]<-verg$fp
