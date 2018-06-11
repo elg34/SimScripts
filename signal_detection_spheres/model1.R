@@ -31,17 +31,17 @@ numit<-8
 #targ=unique(mapply(function(x) round(x*numit), props))
 targ=c(0,1,4,7,8)
 dist=mapply(function(x) numit-x, targ)
-label=mapply(function(x,y) paste("T:",x,"/","D:",y,sep=''), targ,dist)
+label=mapply(function(x,y) paste("T:",x,"/","D:",y,sep=''), targ, dist)
 
-
+sim<-100000
 xvals<-seq(0,6,0.5)
 pc<-NULL
 hit<-NULL
 fp<-NULL
 for (i in xvals){
-  pc<-c(pc,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, 10000)[1,]))
-  hit<-c(hit,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, 10000)[2,]))
-  fp<-c(fp,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, 10000)[3,]))
+  pc<-c(pc,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[1,]))
+  hit<-c(hit,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[2,]))
+  fp<-c(fp,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[3,]))
 }
 
 #fp_dp<-fp
@@ -63,6 +63,7 @@ p1<-ggplot(df, aes(x = x, y = pc, color=group, linetype=group)) +
   #xlim(0, 6) + ylim(0.5, 1) +
   #ggtitle("Performance in Exp given ") +
   xlab("Underlying Signal") + ylab("Pred. Performance") +
+  ggtitle("Model 1") + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
 p1
 

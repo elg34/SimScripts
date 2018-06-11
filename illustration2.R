@@ -29,4 +29,5 @@ df<-data.frame(
 )
 
 
-ggplot(df, aes(x=dv, fill=s)) + geom_density(alpha=.3) + geom_vline(xintercept = sig/2) + facet_wrap(~ c)
+ggplot(df, aes(x=dv, fill=s)) + geom_density(alpha=.3) + geom_vline(xintercept = sig/2) + facet_wrap(~ c) + ggtitle("Underlying Signal: 2.5") +
+  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
