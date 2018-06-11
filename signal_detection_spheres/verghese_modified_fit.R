@@ -1,7 +1,6 @@
 rm(list = ls())
 
 library(psyphy)
-library(neuropsychology)
 library(ggplot2)
 setwd("C:/Users/Luise/Desktop/verghese_fit/")
 
@@ -29,7 +28,7 @@ verghese_mod<-function(sig,n_dist,n_targ,sim){
 n_targ<-1
 n_dist<-7
 numit<-n_dist+n_targ
-sim<-100
+sim<-100000
 sigs<-seq(0,6,by=0.1)
 pc<-vector(length=length(sigs))
 hit<-vector(length=length(sigs))
@@ -65,17 +64,17 @@ dp<-mapply(function(a,b) dprime.ABX(a,b), df$hit, df$fp_dp)
 p1<-ggplot(df, aes(x = sigs, y = pc)) +
   geom_point(size=3) + geom_line(color="red") +
   xlim(0, 6) + ylim(0.49, 1) +
-  xlab("d' 1AFC") + ylab("PC mAFC") +
-  ggtitle(paste("mAFC(y) from 1AFC(x)",numit,"items")) +
+  xlab("1 item d'") + ylab(paste(numit,"item d'")) +
+  ggtitle(paste("Verghese: 2IFC",numit,"items")) +
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
-ggsave(paste("pc_",numit,"items.png",sep=''), plot = p1)
+#ggsave(paste("pc_",numit,"items.png",sep=''), plot = p1)
 p1
 
 p2<-ggplot(df, aes(x = sigs, y = dp)) +
   geom_point(size=3) + geom_line(color="red") +
   xlim(0, 6) + ylim(0, 6) +
-  xlab("d' 1AFC") + ylab("d'mAFC") +
-  ggtitle(paste("mAFC(y) from 1AFC(x)",numit,"items")) + 
+  xlab("1 item d'") + ylab(paste(numit,"item d'")) +
+  ggtitle(paste("Verghese: yes/no task",numit,"items")) + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
-ggsave(paste("dp_",numit,"items.png",sep=''), plot = p2)
+#ggsave(paste("dp_",numit,"items.png",sep=''), plot = p2)
 p2
