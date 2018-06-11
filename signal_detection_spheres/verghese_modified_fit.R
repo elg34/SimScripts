@@ -22,7 +22,7 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
   rej <-length(nosign[nosign<(mu2/2)])
   miss<-length(sign[sign<(mu2/2)])
   p<-(hit+rej)/sim
-  list('p'=p,'hit'=hit/sim,'fp'=fp/sim,'rej'=rej/sim,'miss'=miss/sim)
+  list('p'=p,'hit'=hit/(sim/2),'fp'=fp/(sim/2),'rej'=rej/(sim/2),'miss'=miss/(sim/2))
 }
 
 n_targ<-1

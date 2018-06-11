@@ -17,17 +17,19 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
     nosign[i]<-max(rnorm(n_dist+n_targ,mu1,sd1)) # get numit samples from distractor distribution, take maximum
     sign[i]<-if (n_dist==0){max(rnorm(n_targ,mu2,sd2))}else if (n_targ==0) {max(rnorm(n_dist,mu1,sd1))}else{max(c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2)))} # get numit-1 samples from distractor distribution and 1 from target distribution, take maximum
   }
+  
   fp<-length(nosign[nosign>(mu2/2)])
   hit<-length(sign[sign>(mu2/2)])
   rej <-length(nosign[nosign<(mu2/2)])
   miss<-length(sign[sign<(mu2/2)])
-  p<-(hit+rej)
-  list('p'=p/sim,'hit'=hit/sim,'fp'=fp/sim,'rej'=rej/sim,'miss'=miss/sim)
+  p<-(hit+rej)/sim
+  list('p'=p,'hit'=hit/(sim/2),'fp'=fp/(sim/2),'rej'=rej/(sim/2),'miss'=miss/(sim/2))
 }
 
 numit<-8
-props<-seq(0,1,0.1)#c(1,7,8),#,8),
-targ=unique(mapply(function(x) round(x*numit), props))
+#props<-seq(0,1,0.1)#c(1,7,8),#,8),
+#targ=unique(mapply(function(x) round(x*numit), props))
+targ=c(0,1,4,7,8)
 dist=mapply(function(x) numit-x, targ)
 label=mapply(function(x,y) paste("T:",x,"/","D:",y,sep=''), targ,dist)
 
@@ -42,14 +44,14 @@ for (i in xvals){
   fp<-c(fp,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, 10000)[3,]))
 }
 
-fp_dp<-fp
-fp_dp[fp_dp>=hit]<-hit[fp_dp>=hit]
+#fp_dp<-fp
+#fp_dp[fp_dp>=hit]<-hit[fp_dp>=hit]
 #fp_dp<-apply(as.matrix(fp_dp),1,function(x) if(x==0){x+(1/sim)}else{x})
-dp<-mapply(function(a,b) dprime.ABX(a,b), hit, fp_dp)
+#dp<-mapply(function(a,b) dprime.ABX(a,b), hit, fp_dp)
 df<-data.frame(
   x=sort(rep(xvals,length(targ))),
   pc=pc,
-  dp=dp,
+#  dp=dp,
   fp=fp,
   hit=hit,
   group=c(t(mapply(function(x) rep(x,length(xvals)),label)))
