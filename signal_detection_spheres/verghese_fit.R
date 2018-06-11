@@ -44,7 +44,7 @@ df<-data.frame(
 p1<-ggplot(df, aes(x = sigs, y = pc)) +
     geom_point(size=3) + geom_line(color="red") +
     xlim(0, 6) + ylim(0.49, 1) +
-    xlab("1 item d'") + ylab(paste(numit,"item d'")) +
+    xlab("1 item d'") + ylab(paste(numit,"item PC")) +
     ggtitle(paste("Verghese: 2IFC",numit,"items")) +
     theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
 #ggsave(paste("pc_",numit,"items.png",sep=''), plot = p1)
