@@ -52,3 +52,4 @@ df<-data.frame(
 
 p <- ggplot(df, aes(x=dv, fill=s)) + geom_density(alpha=.3) + facet_wrap(~ c) + ggtitle(paste("Underlying Signal: ",sig)) + theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
 vline.data <- data.frame(z = c((mean(mod1$sign)+mean(mod1$nosign))/2,(mean(mod2$sign)+mean(mod2$nosign))/2), c = c('Model 1', 'Model 2'))
+p + geom_vline(aes(xintercept = z), vline.data)
