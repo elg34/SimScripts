@@ -18,7 +18,7 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
     sign[i]<-if (n_dist==0){max(rnorm(n_targ,mu2,sd2))}else if (n_targ==0) {max(rnorm(n_dist,mu1,sd1))}else{max(c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2)))} # get numit-1 samples from distractor distribution and 1 from target distribution, take maximum
   }
   
-  c<-mu2/2
+  c<-(mean(nosign)+mean(sign))/2
   fp<-length(nosign[nosign>c])
   hit<-length(sign[sign>c])
   rej <-length(nosign[nosign<c])
@@ -61,10 +61,9 @@ df<-data.frame(
 
 p1<-ggplot(df, aes(x = x, y = pc, color=group, linetype=group)) +
   geom_point(size=3) + geom_line() +
-  #xlim(0, 6) + ylim(0.5, 1) +
-  #ggtitle("Performance in Exp given ") +
+  xlim(0, 6) + ylim(0.45, 1) +
   xlab("Underlying Signal") + ylab("Pred. Performance") +
-  ggtitle("Model 1") + 
+  ggtitle("Model 1: c halfway between sampled means") + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
 p1
 

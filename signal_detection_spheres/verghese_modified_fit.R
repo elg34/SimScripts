@@ -17,10 +17,11 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
     nosign[i]<-max(rnorm(n_dist+n_targ,mu1,sd1)) # get numit samples from distractor distribution, take maximum
     sign[i]<-max(c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2))) # get numit-1 samples from distractor distribution and 1 from target distribution, take maximum
   }
-  fp<-length(nosign[nosign>(mu2/2)])
-  hit<-length(sign[sign>(mu2/2)])
-  rej <-length(nosign[nosign<(mu2/2)])
-  miss<-length(sign[sign<(mu2/2)])
+  c<-mu2/2
+  fp<-length(nosign[nosign>c])
+  hit<-length(sign[sign>c])
+  rej <-length(nosign[nosign<c])
+  miss<-length(sign[sign<c])
   p<-(hit+rej)/sim
   list('p'=p,'hit'=hit/(sim/2),'fp'=fp/(sim/2),'rej'=rej/(sim/2),'miss'=miss/(sim/2))
 }
@@ -63,7 +64,7 @@ dp<-mapply(function(a,b) dprime.ABX(a,b), df$hit, df$fp_dp)
 
 p1<-ggplot(df, aes(x = sigs, y = pc)) +
   geom_point(size=3) + geom_line(color="red") +
-  xlim(0, 6) + ylim(0.49, 1) +
+#  xlim(0, 6) + ylim(0.49, 1) +
   xlab("1 item d'") + ylab(paste(numit,"item PC")) +
   ggtitle(paste("Verghese: 2IFC",numit,"items")) +
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
@@ -72,7 +73,7 @@ p1
 
 p2<-ggplot(df, aes(x = sigs, y = dp)) +
   geom_point(size=3) + geom_line(color="red") +
-  xlim(0, 6) + ylim(0, 6) +
+#  xlim(0, 6) + ylim(0, 6) +
   xlab("1 item d'") + ylab(paste(numit,"item d'")) +
   ggtitle(paste("Verghese: yes/no task",numit,"items")) + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))

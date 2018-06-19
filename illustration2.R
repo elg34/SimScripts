@@ -29,5 +29,6 @@ df<-data.frame(
 )
 
 
-ggplot(df, aes(x=dv, fill=s)) + geom_density(alpha=.3) + geom_vline(xintercept = sig/2) + facet_wrap(~ c) + ggtitle("Underlying Signal: 2.5") +
-  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
+p <- ggplot(df, aes(x=dv, fill=s)) + geom_density(alpha=.3) + facet_wrap(~ c) + ggtitle(paste("Underlying Signal: ",sig)) + theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
+vline.data <- data.frame(z = c((mean(t1d7$sign)+mean(t1d7$nosign))/2,(mean(t7d1$sign)+mean(t7d1$nosign))/2), c = c('T:1/D:7', 'T:7/D:1'))
+p + geom_vline(aes(xintercept = z), vline.data)
