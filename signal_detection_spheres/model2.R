@@ -4,7 +4,7 @@ library(psyphy)
 library(ggplot2)
 setwd("C:/Users/Luise/Desktop/verghese_fit/")
 
-verghese_mod<-function(sig,n_targ,n_dist,sim){
+verghese_mod2<-function(sig,n_targ,n_dist,sim, t_type = FALSE){
   mu1<-0
   mu2<-sig # signal size (should be dprime of single target ident.)
   sd1<-1    # SD of target detector responses to distractor (Default: 1)
@@ -14,8 +14,13 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
   nosign<-vector(length = round(sim/2))
   for (i in 1:round(sim/2)){ 
     # 2 kinds of trials
-    nosign[i]<-max(rnorm(n_dist+n_targ,mu1,sd1)) # get numit samples from distractor distribution, take maximum
-    sign[i]<-if (n_dist==0){max(rnorm(n_targ,mu2,sd2))}else if (n_targ==0) {max(rnorm(n_dist,mu1,sd1))}else{max(c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2)))} # get numit-1 samples from distractor distribution and 1 from target distribution, take maximum
+    nosign_gl<-max(rnorm(n_dist+n_targ,mu1,sd1))
+    sign_gl<-if (n_dist==0){max(rnorm(n_targ,mu2,sd2))}else if (n_targ==0) {max(rnorm(n_dist,mu1,sd1))}else if (t_type==TRUE){max(c(rnorm(n_dist,mu2,sd2),rnorm(n_targ,sig^2,sd2)))}else{max(c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2)))}
+    nosign_rel<-max(rnorm(n_dist+n_targ,mu1,sd1))
+    sign_rel<-if (n_dist==0){max(rnorm(n_dist+n_targ,mu1,sd1))}else{max(c(rnorm(7,mu1,sd1),rnorm(1,mu2,sd2)))}
+
+    nosign[i]<-max(nosign_gl,nosign_rel)
+    sign[i]<-max(sign_gl,sign_rel)
   }
   
   c<-(mean(nosign)+mean(sign))/2
@@ -23,16 +28,19 @@ verghese_mod<-function(sig,n_targ,n_dist,sim){
   hit<-length(sign[sign>c])
   rej <-length(nosign[nosign<c])
   miss<-length(sign[sign<c])
+  
   p<-(hit+rej)/sim
   list('p'=p,'hit'=hit/(sim/2),'fp'=fp/(sim/2),'rej'=rej/(sim/2),'miss'=miss/(sim/2))
 }
 
 numit<-8
 #props<-seq(0,1,0.1)#c(1,7,8),#,8),
-#targ=unique(mapply(function(x) round(x*numit), props))
-targ=c(0,1,4,7,8)
-dist=mapply(function(x) numit-x, targ)
-label=mapply(function(x,y) paste("T:",x,"/","D:",y,sep=''), targ, dist)
+#targ<-unique(mapply(function(x) round(x*numit), props))
+#dist<-mapply(function(x) numit-x, targ)
+targ<-c(1,7,8,1)
+dist<-c(7,1,0,7)
+t_type<-c(FALSE,FALSE,FALSE,TRUE)
+label<-mapply(function(x,y,z) paste("T:",x,"/","D:",y,'/T:B^2=',z,sep=''), targ, dist, t_type)
 
 sim<-10000
 xvals<-seq(0,6,0.5)
@@ -40,9 +48,9 @@ pc<-NULL
 hit<-NULL
 fp<-NULL
 for (i in xvals){
-  pc<-c(pc,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[1,]))
-  hit<-c(hit,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[2,]))
-  fp<-c(fp,unlist(mapply(verghese_mod, rep(i,length(targ)), targ, dist, sim)[3,]))
+  pc<-c(pc,unlist(mapply(verghese_mod2, rep(i,length(targ)), targ, dist, sim,t_type)[1,]))
+  hit<-c(hit,unlist(mapply(verghese_mod2, rep(i,length(targ)), targ, dist, sim,t_type)[2,]))
+  fp<-c(fp,unlist(mapply(verghese_mod2, rep(i,length(targ)), targ, dist, sim,t_type)[3,]))
 }
 
 #fp_dp<-fp
@@ -63,7 +71,7 @@ p1<-ggplot(df, aes(x = x, y = pc, color=group, linetype=group)) +
   geom_point(size=3) + geom_line() +
   xlim(0, 6) + ylim(0.45, 1) +
   xlab("Underlying Signal") + ylab("Pred. Performance") +
-  ggtitle("Model 1: c halfway between sampled means") + 
+  ggtitle("Model 2: c halfway between sampled means") + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
 p1
 
