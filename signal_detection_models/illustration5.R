@@ -2,7 +2,6 @@ rm(list = ls())
 
 library(psyphy)
 library(ggplot2)
-library(stats)
 library(zoo)
 
 verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
@@ -31,23 +30,31 @@ verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FAL
   }
 }
 
-verghese2_opt<-function(i){
-  sim<-1000
-  targ<-c(1,8)
-  dist<-c(7,0)
-  t_type<-c(FALSE,FALSE)
-  opt<-c(0.5460,0.9761)
-  res<-mapply(verghese_mod2,sig_gl=rep(i[1],length(targ)),sig_rel=rep(i[2],length(targ)),n_targ=targ,n_dist=dist,sim=rep(sim,length(targ)),t_type=t_type,opt=opt)
-  mean(res^2)
+targ<-c(1,7,8,1)
+dist<-c(7,1,0,7)
+t_type<-c(FALSE,FALSE,FALSE,TRUE)
+label<-mapply(function(x,y,z) paste("T:",x,"/","D:",y,'/T:B^2=',z,sep=''), targ, dist, t_type)
+
+sim<-10000
+xvals<-seq(0,6,0.5)
+dp<-NULL
+for (i in xvals){
+  dp<-c(dp,mapply(verghese_mod2, rep(0,length(targ)),rep(i,length(targ)), targ, dist, sim,t_type))
 }
 
-o<-optim(c(2,2),verghese2_opt)
+df<-data.frame(
+  x=sort(rep(xvals,length(targ))),
+  dp=dp,
+  group=c(t(mapply(function(x) rep(x,length(xvals)),label)))
+)
 
-sim<-1000
-targ<-c(1,8)
-dist<-c(7,0)
-t_type<-c(FALSE,FALSE)
-opt<-c(FALSE,FALSE)
-res<-mapply(verghese_mod2,
-            sig_gl=rep(o$par[1],length(targ)),sig_rel=rep(o$par[2],length(targ)),
-            n_targ=targ,n_dist=dist,sim=rep(sim,length(targ)),t_type=t_type,opt=opt)
+
+p1<-ggplot(df, aes(x = x, y = dp, color=group, linetype=group)) +
+  geom_point(size=3) + geom_line() +
+  xlim(0, 6) + #ylim(0.45, 1) +
+  xlab("Underlying Signal") + ylab("Pred. Performance") +
+  ggtitle("Model 2: gl fixed, rel varied") + 
+  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
+p1
+
+# sometimes odd values for hits?
