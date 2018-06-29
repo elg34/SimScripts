@@ -47,7 +47,7 @@ verghese_mod2_opt<-function(sig,n_targ,n_dist,sim, t_type = FALSE,t){
   abs(get_roc(sign,nosign,sim)$dp-t)
 }
 
-verghese_mod2_opt<-function(sig,n_targ,n_dist,sim, t_type = FALSE){
+verghese_mod2<-function(sig,n_targ,n_dist,sim, t_type = FALSE){
   mu1<-0
   mu2<-sig # signal size (should be dprime of single target ident.)
   sd1<-1    # SD of target detector responses to distractor (Default: 1)

@@ -2,35 +2,7 @@ rm(list = ls())
 
 library(psyphy)
 library(ggplot2)
-
-# given responses on signal/no-signal trials, what are the fp and hit rates for all criterion values
-get_roc<-function(sign,nosign){
-  cs<-sort(c(sign,nosign))
-  fp<-vector(length = length(cs))
-  hit<-vector(length = length(cs))
-  rej<-vector(length = length(cs))
-  miss<-vector(length = length(cs))
-  count<-1
-  for (c in cs){
-    fp[count]<-length(nosign[nosign>c])/(sim/2)
-    hit[count]<-length(sign[sign>c])/(sim/2)
-    rej[count] <-length(nosign[nosign<c])/(sim/2)
-    miss[count]<-length(sign[sign<c])/(sim/2)
-    count<-count+1
-  }
-  AUC <- abs(sum(diff(fp)*rollmean(hit,2)))
-  dp <- qnorm(AUC)*sqrt(2)
-  list('AUC'=AUC,'dp'=dp)
-}
-
-get_pc<-function(sign,nosign,c=(mean(nosign)+mean(sign))/2){
-  fp<-length(nosign[nosign>c])
-  hit<-length(sign[sign>c])
-  rej <-length(nosign[nosign<c])
-  miss<-length(sign[sign<c])
-  p<-(hit+rej)/sim
-  list('p'=p,'hit'=hit/(sim/2),'fp'=fp/(sim/2),'rej'=rej/(sim/2),'miss'=miss/(sim/2))
-}
+library(zoo)
 
 verghese_mod2<-function(sig,n_targ,n_dist,sim, t_type = FALSE){
   mu1<-0
@@ -45,27 +17,26 @@ verghese_mod2<-function(sig,n_targ,n_dist,sim, t_type = FALSE){
     nosign_gl<-rnorm(n_dist+n_targ,mu1,sd1)
     sign_gl<-if (n_dist==0){rnorm(n_targ,mu2,sd2)}else if (n_targ==0) {rnorm(n_dist,mu1,sd1)}else if (t_type==TRUE){c(rnorm(n_dist,mu2,sd2),rnorm(n_targ,sig^2,sd2))}else{c(rnorm(n_dist,mu1,sd1),rnorm(n_targ,mu2,sd2))}
     nosign_rel<-max(rnorm(n_dist+n_targ,mu1,sd1))
-    sign_rel<-if (n_dist==0){rnorm(n_dist+n_targ,mu1,sd1)}else if (t_type==TRUE){c(rnorm(7,mu1,sd1),rnorm(1,mu2^2,sd2))}else{c(rnorm(7,mu1,sd1),rnorm(1,mu2,sd2))}
+    sign_rel<-if (n_dist==0){rnorm(n_dist+n_targ,mu1,sd1)}else{c(rnorm(7,mu1,sd1),rnorm(1,mu2,sd2))}
     
-  
     nosign[i]<-max(c(nosign_gl,nosign_rel))
     sign[i]<-max(c(sign_gl,sign_rel))
   }
   
-  get_roc(sign,nosign)
-  #get_pc(sign,nosign)
+  cs<-sort(c(sign,nosign))
+  fp<-mapply(function(c,sim) length(nosign[nosign>c])/(sim/2),cs,sim)
+  hit<-mapply(function(c,sim) length(sign[sign>c])/(sim/2),cs,sim)
+  AUC <- abs(sum(diff(fp)*rollmean(hit,2)))
+  dp <- qnorm(AUC)*sqrt(2)
+  list('AUC'=AUC,'dp'=dp)
 }
 
-#numit<-8
-#props<-seq(0,1,0.1)#c(1,7,8),#,8),
-#targ<-unique(mapply(function(x) round(x*numit), props))
-#dist<-mapply(function(x) numit-x, targ)
 targ<-c(1,7,8,1)
 dist<-c(7,1,0,7)
 t_type<-c(FALSE,FALSE,FALSE,TRUE)
 label<-mapply(function(x,y,z) paste("T:",x,"/","D:",y,'/T:B^2=',z,sep=''), targ, dist, t_type)
 
-sim<-10000
+sim<-1000
 xvals<-seq(0,6,0.5)
 AUC<-NULL
 dp<-NULL
