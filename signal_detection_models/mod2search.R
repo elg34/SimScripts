@@ -32,7 +32,7 @@ verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FAL
 }
 
 verghese2_opt<-function(i){
-  sim<-1000
+  sim<-10000
   targ<-c(1,8)
   dist<-c(7,0)
   t_type<-c(FALSE,FALSE)
