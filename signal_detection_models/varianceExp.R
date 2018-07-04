@@ -89,3 +89,5 @@ for (i in 1:10){
 #[1] 1.168722
 #> sd(par_rel)
 #[1] 0.3149511
+
+# run the parameter space exploration once and then read off - how realistic?
