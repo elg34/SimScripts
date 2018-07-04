@@ -32,6 +32,7 @@ verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FAL
 
 targ<-c(1,7,8,1)
 dist<-c(7,1,0,7)
+opt_lui<-c(0.5460,1.1775,0.9761,0.8691)
 t_type<-c(FALSE,FALSE,FALSE,TRUE)
 label<-mapply(function(x,y,z) paste("T:",x,"/","D:",y,'/T:B^2=',z,sep=''), targ, dist, t_type)
 
