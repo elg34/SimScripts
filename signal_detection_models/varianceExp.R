@@ -32,7 +32,7 @@ verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FAL
 }
 
 verghese2_opt<-function(i){
-  sim<-10000
+  sim<-1000
   targ<-c(1,7,8,1)
   dist<-c(7,1,0,7)
   t_type<-c(FALSE,FALSE,FALSE,TRUE)
@@ -41,22 +41,51 @@ verghese2_opt<-function(i){
   sqrt(mean(res^2))
 }
 
-pars<-NULL
+err<-NULL
 for (i in 1:10){
-  o<-optim(c(2,2),verghese2_opt)
-  pars<-c(pars,o$par[2])
+  err<-c(err,verghese2_opt(c(1,2)))
 }
-print(sd(pars))
+# 10000 trials
+#> mean(err)
+#[1] 0.5469264
+#> sd(err)
+#[1] 0.01193355
+# 1000 trials
+#>  mean(err)
+#[1] 0.5403271
+#> sd(err)
+#[1] 0.03644806
+# 100 trials
+#>  mean(err)
+#[1] 0.3719539
+#> sd(err)
+#[1] 0.0662245
 
-sim<-1000
-targ<-c(1,8)
-dist<-c(7,0)
-t_type<-c(FALSE,FALSE)
-opt<-c(FALSE,FALSE)
-res<-mapply(verghese_mod2,
-            sig_gl=rep(o$par[1],length(targ)),sig_rel=rep(o$par[2],length(targ)),
-            n_targ=targ,n_dist=dist,sim=rep(sim,length(targ)),t_type=t_type,opt=opt)
+par_gl<-NULL
+par_rel<-NULL
+for (i in 1:10){
+  o<-optim(c(1,1),verghese2_opt,method="L-BFGS-B",lower = 0, upper = 5)
+  par_gl<-c(par_gl,o$par[1])
+  par_rel<-c(par_rel,o$par[2])
+}
 
-# make grid!!
-
-# I think if the predictions of signal combinations are very close, this gives us such a wide range of optimized values
+# 10000 trials
+# can't even be contemplated
+# 1000 trials
+#> mean(par_gl)
+#[1] 0.9097794
+#> sd(par_gl)
+#[1] 0.1363362
+#> mean(par_rel)
+#[1] 1.236852
+#> sd(par_rel)
+#[1] 0.3055021
+# 100 trials
+#> mean(par_gl)
+#[1] 0.9224853
+#> sd(par_gl)
+#[1] 0.115423
+#> mean(par_rel)
+#[1] 1.168722
+#> sd(par_rel)
+#[1] 0.3149511
