@@ -4,6 +4,7 @@ library(psyphy)
 library(ggplot2)
 library(stats)
 library(zoo)
+library(DEoptim)
 
 verghese_mod2<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   numit<-n_dist+n_targ
@@ -64,7 +65,7 @@ for (i in 1:10){
 par_gl<-NULL
 par_rel<-NULL
 for (i in 1:10){
-  o<-optim(c(1,1),verghese2_opt,method="L-BFGS-B",lower = 0, upper = 5)
+  o<-optim(c(1,1),verghese2_opt)#,method="L-BFGS-B",lower = 0, upper = 5)
   par_gl<-c(par_gl,o$par[1])
   par_rel<-c(par_rel,o$par[2])
 }
@@ -91,3 +92,13 @@ for (i in 1:10){
 #[1] 0.3149511
 
 # run the parameter space exploration once and then read off - how realistic?
+
+par_gl<-NULL
+par_rel<-NULL
+for (i in 1:10){
+  o<-DEoptim(verghese2_opt, lower = c(0, 0), upper = c(5, 5), control = DEoptim.control(trace = 10))
+  par_gl<-c(par_gl,o$par[1])
+  par_rel<-c(par_rel,o$par[2])
+}
+o<-DEoptim(verghese2_opt, lower = c(0, 0), upper = c(5, 5), control = DEoptim.control(trace = 10, strategy = 6, itermax = 1000,steptol = 50, reltol = 1e-10))
+
