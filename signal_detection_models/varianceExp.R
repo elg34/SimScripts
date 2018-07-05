@@ -14,8 +14,8 @@ verghese2_opt<-function(gl,rel,sim){
   sqrt(mean(res^2))
 }
 
-xvals<-seq(0,6,0.5)
-yvals<-seq(0,6,0.5)
+xvals<-seq(0,1,0.1)
+yvals<-seq(1,2,0.1)
 grid<-expand.grid(x=xvals,y=yvals)
 loss<-mapply(verghese2_opt,grid$x,grid$y)
 
