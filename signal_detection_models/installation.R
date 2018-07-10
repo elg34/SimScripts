@@ -1,8 +1,8 @@
 library("devtools")
 library(roxygen2)
 
-setwd("c/Users/Lobster/Documents/GitHub/SimScripts/signal_detection_models/model/")
+setwd("C:/Users/Luise/Documents/GitHub/SimScripts/model")
 document()
 
-setwd("..")
+setwd("C:/Users/Luise/Documents/GitHub/SimScripts/")
 install("model")
