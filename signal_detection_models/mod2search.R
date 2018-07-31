@@ -36,7 +36,7 @@ verghese2_opt<-function(i){
   targ<-c(1,7,8,1)
   dist<-c(7,1,0,7)
   t_type<-c(FALSE,FALSE,FALSE,TRUE)
-  opt<-c(0.5460,1.1775,0.9761,0.8691)
+  opt<-c(1.0255,1.8361,2.7298,1.6832)
   res<-mapply(verghese_mod2,sig_gl=rep(i[1],length(targ)),sig_rel=rep(i[2],length(targ)),n_targ=targ,n_dist=dist,sim=rep(sim,length(targ)),t_type=t_type,opt=opt)
   sqrt(mean(res^2))
 }
