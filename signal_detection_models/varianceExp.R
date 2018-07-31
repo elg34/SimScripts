@@ -5,7 +5,7 @@ library(DEoptim)
 library(model)
 library(zoo)
 
-verghese2_opt<-function(gl,rel,sim){
+verghese2_opt<-function(gl,rel){
   sim<-10000
   targ<-c(1,7,8,1)
   dist<-c(7,1,0,7)
@@ -15,8 +15,8 @@ verghese2_opt<-function(gl,rel,sim){
   sqrt(mean(res^2))
 }
 
-xvals<-seq(0,6,0.1)
-yvals<-seq(0,6,0.1)
+xvals<-seq(1,2,0.2)
+yvals<-seq(0,4,0.2)
 grid<-expand.grid(x=xvals,y=yvals)
 loss<-mapply(verghese2_opt,grid$x,grid$y)
 
