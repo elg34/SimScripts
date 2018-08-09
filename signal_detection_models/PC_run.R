@@ -2,7 +2,7 @@ rm(list = ls())
 
 library(ggplot2)
 #require(DEoptim)
-#library(model)
+library(model)
 require(zoo)
 
 verghese2_opt<-function(gl,rel){

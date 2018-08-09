@@ -28,6 +28,6 @@ rel_model<-function(sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   if (opt==FALSE){
     dp
   }else{
-    abs(dp-opt)
+    dp-opt
   }
 }

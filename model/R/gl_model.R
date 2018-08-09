@@ -29,6 +29,6 @@ gl_model<-function(sig_gl,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   if (opt==FALSE){
     dp
   }else{
-    abs(dp-opt)
+    dp-opt
   }
 }

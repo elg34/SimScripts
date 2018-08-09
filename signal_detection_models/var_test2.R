@@ -1,17 +1,16 @@
-#' Full version of the model
-#'
-#' Returns either the d-prime of a condition given by the inputs or the absolute error of the predicted d' relative to a prespecified value.
-#' @param sig_gl Signal strength for detecting position change for a single sphere
-#' @param sig_rel Signal strength for detecting relative position change for a single sphere
-#' @param n_targ The number of targets, i.e. spheres that move on that trial
-#' @param n_dist The number of static distractors (unless t_type=TRUE), in which case it is the number of spheres moving with lesser signal strength
-#' @param sim The number of trials to simulate
-#' @param t_type The type of the target/distractor relationship
-#' @param opt An existing d' to compare predictions to if given
-#' @keywords fullmodel
-#' @export
-#' @examples
-#' full_model()
+rm(list = ls())
+
+library(zoo)
+
+get_dp<-function(sign,nosign){
+  cs<-sort(c(sign,nosign))
+  sim<-length(cs)
+  fp<-mapply(function(c,sim) length(nosign[nosign>c])/(sim/2),cs,sim)
+  hit<-mapply(function(c,sim) length(sign[sign>c])/(sim/2),cs,sim)
+  AUC <- abs(sum(diff(fp)*rollmean(hit,2)))
+  
+  qnorm(AUC)*sqrt(2)
+}
 
 full_model<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   numit<-n_dist+n_targ
@@ -24,7 +23,7 @@ full_model<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE)
     sign_rel<-matrix(rnorm((sim/2)*numit,0,1), nrow = sim/2,ncol=numit, byrow = TRUE)
   }else{
     sign_rel<-cbind(matrix(rnorm((sim/2)*(numit-1),0,1), nrow = sim/2,ncol=numit-1, byrow = TRUE),
-              matrix(rnorm((sim/2),sig_rel,1), nrow = sim/2,ncol=1, byrow = TRUE))
+                    matrix(rnorm((sim/2),sig_rel,1), nrow = sim/2,ncol=1, byrow = TRUE))
   }
   if (t_type==TRUE){
     sign_gl<-cbind(matrix(rnorm((sim/2)*n_dist,sig_gl,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
@@ -39,6 +38,13 @@ full_model<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE)
   if (opt==FALSE){
     dp
   }else{
-    dp-opt
+    abs(dp-opt)
   }
 }
+
+run<-100
+sim<-10000
+pred1B<-mapply(full_model,sig_gl=rep(1.6,run),sig_rel=rep(1.6,run),n_targ=1,n_dist=7,sim=sim)
+hist(pred1B)
+mean(pred1B)
+sd(pred1B)
