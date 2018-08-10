@@ -4,8 +4,7 @@
 \alias{full_model}
 \title{Full version of the model}
 \usage{
-full_model(sig_gl, sig_rel, n_targ, n_dist, sim, t_type = FALSE,
-  opt = FALSE)
+full_model(sig_gl, sig_rel, n_targ, n_dist, t_type = FALSE, opt = FALSE)
 }
 \arguments{
 \item{sig_gl}{Signal strength for detecting position change for a single sphere}
@@ -15,8 +14,6 @@ full_model(sig_gl, sig_rel, n_targ, n_dist, sim, t_type = FALSE,
 \item{n_targ}{The number of targets, i.e. spheres that move on that trial}
 
 \item{n_dist}{The number of static distractors (unless t_type=TRUE), in which case it is the number of spheres moving with lesser signal strength}
-
-\item{sim}{The number of trials to simulate}
 
 \item{t_type}{The type of the target/distractor relationship}
 

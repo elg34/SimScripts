@@ -4,7 +4,7 @@
 \alias{rel_model}
 \title{Relative-only version of the model}
 \usage{
-rel_model(sig_rel, n_targ, n_dist, sim, t_type = FALSE, opt = FALSE)
+rel_model(sig_rel, n_targ, n_dist, t_type = FALSE, opt = FALSE)
 }
 \arguments{
 \item{sig_rel}{Signal strength for detecting relative position change for a single sphere}
@@ -12,8 +12,6 @@ rel_model(sig_rel, n_targ, n_dist, sim, t_type = FALSE, opt = FALSE)
 \item{n_targ}{The number of targets, i.e. spheres that move on that trial}
 
 \item{n_dist}{The number of static distractors (unless t_type=TRUE), in which case it is the number of spheres moving with lesser signal strength}
-
-\item{sim}{The number of trials to simulate}
 
 \item{t_type}{The type of the target/distractor relationship}
 

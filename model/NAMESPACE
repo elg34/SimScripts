@@ -2,5 +2,8 @@
 
 export()
 export(full_model)
+export(full_model_samp)
 export(gl_model)
+export(gl_model_samp)
 export(rel_model)
+export(rel_model_samp)

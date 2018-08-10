@@ -5,7 +5,6 @@
 #' @param sig_rel Signal strength for detecting relative position change for a single sphere
 #' @param n_targ The number of targets, i.e. spheres that move on that trial
 #' @param n_dist The number of static distractors (unless t_type=TRUE), in which case it is the number of spheres moving with lesser signal strength
-#' @param sim The number of trials to simulate
 #' @param t_type The type of the target/distractor relationship
 #' @param opt An existing d' to compare predictions to if given
 #' @keywords fullmodel
@@ -13,28 +12,30 @@
 #' @examples
 #' full_model()
 
-full_model<-function(sig_gl,sig_rel,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
+full_model<-function(sig_gl,sig_rel,n_targ,n_dist, t_type = FALSE,opt=FALSE){
   numit<-n_dist+n_targ
+  if (n_targ==0){print('Warning! Not checked for 0 targets!')}
   
-  nosign_gl<-matrix(rnorm((sim/2)*numit,0,1), nrow = sim/2,ncol=numit, byrow = TRUE)
-  nosign_rel<-matrix(rnorm((sim/2)*numit,0,1), nrow = sim/2,ncol=numit, byrow = TRUE)
-  nosign<-apply(cbind(nosign_gl,nosign_rel),1,max)
-  
-  if (n_dist==0){
-    sign_rel<-matrix(rnorm((sim/2)*numit,0,1), nrow = sim/2,ncol=numit, byrow = TRUE)
-  }else{
-    sign_rel<-cbind(matrix(rnorm((sim/2)*(numit-1),0,1), nrow = sim/2,ncol=numit-1, byrow = TRUE),
-              matrix(rnorm((sim/2),sig_rel,1), nrow = sim/2,ncol=1, byrow = TRUE))
-  }
   if (t_type==TRUE){
-    sign_gl<-cbind(matrix(rnorm((sim/2)*n_dist,sig_gl,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
-                   matrix(rnorm((sim/2)*n_targ,sig_gl^2,1), nrow = sim/2,ncol=n_targ, byrow = TRUE))
+    sigd<-sig_gl
+    sigt<-(1.25+1)*sig_gl
   }else{
-    sign_gl<-cbind(matrix(rnorm((sim/2)*n_dist,0,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
-                   matrix(rnorm((sim/2)*n_targ,sig_gl,1), nrow = sim/2,ncol=n_targ, byrow = TRUE))
+    sigd<-0
+    sigt<-sig_gl
   }
-  sign<-apply(cbind(sign_gl,sign_rel),1,max)
-  dp<-get_dp(sign,nosign)
+  
+  x <- seq(-10,20,0.1)
+  
+  fp<- 1-(pnorm(x, mean = 0, sd = 1)^(numit*2))
+  if (n_dist==0){
+    hit<-1-(pnorm(x, mean = sigt, sd = 1)^n_targ * pnorm(x, mean = 0, sd = 1)^numit)
+  }else{
+    hit<-1-(pnorm(x, mean = sigd, sd = 1)^n_dist * pnorm(x, mean = sigt, sd = 1)^n_targ * 
+              pnorm(x, mean = sig_rel, sd = 1) * pnorm(x, mean = 0, sd = 1)^(numit-1))
+  }
+  
+  AUC <- abs(sum(diff(fp)*rollmean(hit,2)))
+  dp<-qnorm(AUC)*sqrt(2)
   
   if (opt==FALSE){
     dp

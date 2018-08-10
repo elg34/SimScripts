@@ -4,37 +4,27 @@
 #' @param sig_gl Signal strength for detecting position change for a single sphere
 #' @param n_targ The number of targets, i.e. spheres that move on that trial
 #' @param n_dist The number of static distractors (unless t_type=TRUE), in which case it is the number of spheres moving with lesser signal strength
+#' @param sim The number of trials to simulate
 #' @param t_type The type of the target/distractor relationship
 #' @param opt An existing d' to compare predictions to if given
 #' @keywords fullmodel
 #' @export
 #' @examples
-#' gl_model()
+#' gl_model_samp()
 
-gl_model<-function(sig_gl,n_targ,n_dist, t_type = FALSE,opt=FALSE){
+gl_model_samp<-function(sig_gl,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   numit<-n_dist+n_targ
   
+  nosign<-apply(matrix(rnorm((sim/2)*numit,0,1), nrow = sim/2,ncol=numit, byrow = TRUE),1,max)
+  
   if (t_type==TRUE){
-    sigd<-sig_gl
-    sigt<-sig_gl+sig_gl^2
+    sign<-apply(cbind(matrix(rnorm((sim/2)*n_dist,sig_gl,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
+                   matrix(rnorm((sim/2)*n_targ,sig_gl+sig_gl^2,1), nrow = sim/2,ncol=n_targ, byrow = TRUE)),1,max)
   }else{
-    sigd<-0
-    sigt<-sig_gl
+    sign<-apply(cbind(matrix(rnorm((sim/2)*n_dist,0,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
+                   matrix(rnorm((sim/2)*n_targ,sig_gl,1), nrow = sim/2,ncol=n_targ, byrow = TRUE)),1,max)
   }
-  
-  x <- seq(-10,20,0.1)
-  
-  fp<-1-(pnorm(x, mean = 0, sd = 1)^numit)
-  if (n_dist==0){
-    hit<-(1-(pnorm(x, mean = sigt, sd = 1)^n_targ))
-  }else if (n_targ==0){
-    hit<-(1-(pnorm(x, mean = sigd, sd = 1)^n_dist))
-  }else{
-    hit<-(1-(pnorm(x, mean = sigd, sd = 1)^n_dist * pnorm(x, mean = sigt, sd = 1)^n_targ))
-  }
-  
-  AUC <- abs(sum(diff(fp)*rollmean(hit,2)))
-  dp<-qnorm(AUC)*sqrt(2)
+  dp<-get_dp(sign,nosign)
   
   if (opt==FALSE){
     dp
