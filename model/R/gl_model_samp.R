@@ -19,7 +19,7 @@ gl_model_samp<-function(sig_gl,n_targ,n_dist,sim, t_type = FALSE,opt=FALSE){
   
   if (t_type==TRUE){
     sign<-apply(cbind(matrix(rnorm((sim/2)*n_dist,sig_gl,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
-                   matrix(rnorm((sim/2)*n_targ,sig_gl+sig_gl^2,1), nrow = sim/2,ncol=n_targ, byrow = TRUE)),1,max)
+                   matrix(rnorm((sim/2)*n_targ,2*sig_gl,1), nrow = sim/2,ncol=n_targ, byrow = TRUE)),1,max)
   }else{
     sign<-apply(cbind(matrix(rnorm((sim/2)*n_dist,0,1), nrow = sim/2,ncol=n_dist, byrow = TRUE),
                    matrix(rnorm((sim/2)*n_targ,sig_gl,1), nrow = sim/2,ncol=n_targ, byrow = TRUE)),1,max)
