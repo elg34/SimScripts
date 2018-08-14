@@ -4,7 +4,8 @@
 \alias{full_model}
 \title{Full version of the model}
 \usage{
-full_model(sig_gl, sig_rel, n_targ, n_dist, t_type = FALSE, opt = FALSE)
+full_model(sig_gl, sig_rel, n_targ, n_dist, t_type = FALSE,
+  opt = FALSE)
 }
 \arguments{
 \item{sig_gl}{Signal strength for detecting position change for a single sphere}

@@ -22,7 +22,7 @@ df<-data.frame(
   Condition=c(t(mapply(function(x) rep(x,length(xvals)),label)))
 )
 
-p1<-ggplot(df, aes(x = x, y = dp, color=Condition)) +
+p1<-ggplot(df, aes(x = x, y = dp, color=Condition, shape=Condition)) +
   geom_point(size=3) + geom_line() +
   xlim(0, 5) + #ylim(0.45, 1) +
   xlab("Underlying Signal") + ylab("Pred. Performance") +

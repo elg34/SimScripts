@@ -4,7 +4,8 @@
 \alias{rel_model_samp}
 \title{Relative-only version of the model}
 \usage{
-rel_model_samp(sig_rel, n_targ, n_dist, sim, t_type = FALSE, opt = FALSE)
+rel_model_samp(sig_rel, n_targ, n_dist, sim, t_type = FALSE,
+  opt = FALSE)
 }
 \arguments{
 \item{sig_rel}{Signal strength for detecting relative position change for a single sphere}

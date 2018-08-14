@@ -8,8 +8,8 @@ setwd("C:/Users/Lobster/Documents/GitHub/SimScripts/signal_detection_models/")
 verghese2_opt<-function(gl,rel,it){
   opt<-matrix(c(c(1.0255,1.8361,2.7298,1.6832), #LGD
                 c(1.5695,1.0598,0.7706,1.9045), # MW
-                c(1.669,1.0598,1.6832,1.956), # JS
-                c(0.5883,1.0488,1.366,1.366)), # AM
+                c(1.2822,1.5479,1.6632,1.548), # JS
+                c(1.1237,0.6387,1.0088,0.843)), # AM
               ncol = 4,byrow = TRUE)
   
   targ<-c(1,7,8,1)
@@ -21,7 +21,7 @@ verghese2_opt<-function(gl,rel,it){
 }
 
 subj<-c('S1','S2','S3','S4')
-i=2
+i=1
 
 xvals<-seq(0,5,0.1)
 yvals<-seq(0,5,0.1)
