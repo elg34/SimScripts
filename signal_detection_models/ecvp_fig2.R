@@ -34,7 +34,7 @@ ggplot(df, aes(x=x,y=y,z=Error)) +
   facet_wrap(vars(Condition),nrow = 2) +
   ggtitle('Combined Model:')
 
-# 
+
 # for (i in label){
 #   print(i)
 #   dfsubs<-subset(df,Condition==i)

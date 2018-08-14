@@ -24,7 +24,7 @@ df<-data.frame(
 )
 
 ggplot(df, aes(x = x, y = Error)) +
-  geom_point(size=3,aes(shape=Condition,color=Error)) + geom_line(aes(color=Error)) +
+  geom_point(size=3,aes(shape=Condition,color=Error),show.legend=FALSE) + geom_line(aes(color=Error)) +
   scale_color_gradientn(colours=c("#FF0000FF","#FFFF00","#000000")) +
   xlim(0, 5) + #ylim(0.45, 1) +
   xlab("Underlying Signal") + ylab("Error") +
