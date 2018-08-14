@@ -27,7 +27,7 @@ df<-data.frame(
 )
 
 ggplot(df, aes(x=x,y=y,z=Error)) + 
-  geom_raster(aes(fill = Error)) + scale_fill_gradientn(colours=c("#FF0000FF","#FFFF00","#000000")) +
+  geom_raster(aes(fill = Error)) + scale_fill_gradientn(colours=c("#FF0000FF","#FFFF00","#000000"),limits=c(0,8)) +
   geom_contour(colour = "white") + 
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))+
   xlab("Global Signal") + ylab("Relative Signal") +

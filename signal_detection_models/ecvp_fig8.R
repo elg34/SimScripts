@@ -23,11 +23,20 @@ df<-data.frame(
   Condition=c(t(mapply(function(x) rep(x,length(xvals)),label)))
 )
 
+#ggplot(df, aes(x = x, y = Error)) +
+#  geom_point(size=3,aes(shape=Condition,color=Error),show.legend=FALSE) + geom_line(aes(color=Error)) +
+#  scale_color_gradientn(colours=c("#FF0000FF","#FFFF00","#000000")) +
+#  xlim(0, 5) + #ylim(0.45, 1) +
+#  xlab("Underlying Signal") + ylab("Error") +
+#  ggtitle("Global-only Model:") + 
+#  facet_wrap(vars(Condition),nrow = 2) +
+#  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
+
 ggplot(df, aes(x = x, y = Error)) +
   geom_point(size=3,aes(shape=Condition,color=Error),show.legend=FALSE) + geom_line(aes(color=Error)) +
-  scale_color_gradientn(colours=c("#FF0000FF","#FFFF00","#000000")) +
+  scale_color_gradientn(colours=c("#FF0000FF","#FFFF00","#000000"),limits=c(0,8)) +
   xlim(0, 5) + #ylim(0.45, 1) +
-  xlab("Underlying Signal") + ylab("Error") +
+  xlab("Global Signal") + ylab("Error") +
   ggtitle("Global-only Model:") + 
   facet_wrap(vars(Condition),nrow = 2) +
   theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"))
