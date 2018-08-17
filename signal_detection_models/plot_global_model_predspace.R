@@ -27,5 +27,5 @@ p1<-ggplot(df, aes(x = x, y = dp, color=Condition, shape=Condition)) +
   xlim(0, 5) + #ylim(0.45, 1) +
   xlab("Underlying Signal") + ylab("Pred. Performance") +
   ggtitle("Global-only Model:") + 
-  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"),legend.position = c(0.15, 0.8))
+  theme(text = element_text(size=24),plot.title = element_text(hjust = 0.5, face="bold"),legend.position = c(0.2, 0.8))
 p1

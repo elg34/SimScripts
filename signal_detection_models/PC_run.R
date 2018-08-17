@@ -6,10 +6,10 @@ require(zoo)
 setwd("C:/Users/Lobster/Documents/GitHub/SimScripts/signal_detection_models/")
 
 verghese2_opt<-function(gl,rel,it){
-  opt<-matrix(c(c(1.0255,1.8361,2.7298,1.6832), #LGD
-                c(1.5695,1.0598,0.7706,1.9045), # MW
-                c(1.2822,1.5479,1.6632,1.548), # JS
-                c(1.1237,0.6387,1.0088,0.843)), # AM
+  opt<-matrix(c(c(1.0255,1.8361,2.7298,1.6832), #L
+                c(1.9098,1.0488,1.0505,1.6217), #M
+                c(1.2822,1.5479,1.6632,1.548), #J
+                c(1.0158,0.721,0.9488,0.7777)), #A
               ncol = 4,byrow = TRUE)
   
   targ<-c(1,7,8,1)
@@ -21,7 +21,7 @@ verghese2_opt<-function(gl,rel,it){
 }
 
 subj<-c('S1','S2','S3','S4')
-i=1
+i=4
 
 xvals<-seq(0,5,0.1)
 yvals<-seq(0,5,0.1)
@@ -46,10 +46,10 @@ print(paste('S',i,'::: Comb:: x:',best_comb[1],'y:',best_comb[2],
             'Rel:: y:',best_rel))
 
 p<-ggplot(df, aes(x=x,y=y,z=loss)) + 
-  geom_raster(aes(fill = loss)) + scale_fill_gradientn(colours=c("#FF0000FF","#FFFF00","#000000")) +
+  geom_raster(aes(fill = loss)) + scale_fill_gradientn(colours=c("#FF0000FF","#FFFF00","#000000"),limits=c(0,6.9)) +
   geom_contour(colour = "white") + 
-  theme(text = element_text(size=16),plot.title = element_text(hjust = 0.5, face="bold"))+
+  theme(text = element_text(size=24),plot.title = element_text(hjust = 0.5, face="bold"))+
   xlab("Global Signal") + ylab("Relative Signal") +
-  ggtitle(paste("Loss of objective function:", subj[i])) +
+  ggtitle(subj[i]) +
   geom_point(aes(x=best_comb[1], y=best_comb[2]), colour="white")
 p

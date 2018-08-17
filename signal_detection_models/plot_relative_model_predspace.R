@@ -25,4 +25,4 @@ df<-data.frame(
 ggplot(df, aes(x = x, y = dp, color=Condition, shape=Condition)) +
   geom_point(size=3) + geom_line() + xlim(0, 5) +
   xlab("Underlying Signal") + ylab("Pred. Performance") + ggtitle("Relative-only Model:") + 
-  theme(text = element_text(size=20),plot.title = element_text(hjust = 0.5, face="bold"),legend.position = c(0.15, 0.8))
+  theme(text = element_text(size=24),plot.title = element_text(hjust = 0.5, face="bold"),legend.position = c(0.2, 0.8))
